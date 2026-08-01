@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Arduino Piano Project</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="scroll-meter" aria-hidden="true"></div>
+
+    <main id="top">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-content" data-reveal>
+          <h1 id="hero-title">Arduino Piano Project</h1>
+          <p class="hero-byline">by Dasha Katkova</p>
+        </div>
+
+        <div class="piano-console" data-piano-model data-reveal>
+          <div class="piano-stage">
+            <div class="piano-viewport" data-piano-tilt>
+              <img
+                class="piano-image"
+                src="assets/piano/off.jpg"
+                alt="Interactive top-down model of the handmade Arduino piano"
+                data-piano-image
+              />
+              <div class="piano-key-layer" aria-label="Playable piano keys">
+                <button type="button" class="piano-key-button" data-key-index="0" aria-label="Play C4 at 261.63 hertz">
+                  <span>C4</span>
+                </button>
+                <button type="button" class="piano-key-button" data-key-index="1" aria-label="Play D4 at 293.66 hertz">
+                  <span>D4</span>
+                </button>
+                <button type="button" class="piano-key-button" data-key-index="2" aria-label="Play E4 at 329.63 hertz">
+                  <span>E4</span>
+                </button>
+                <button type="button" class="piano-key-button" data-key-index="3" aria-label="Play F4 at 349.23 hertz">
+                  <span>F4</span>
+                </button>
+                <button type="button" class="piano-key-button" data-key-index="4" aria-label="Play G4 at 392 hertz">
+                  <span>G4</span>
+                </button>
+                <button type="button" class="piano-key-button" data-key-index="5" aria-label="Play A4 at 440 hertz">
+                  <span>A4</span>
+                </button>
+                <button type="button" class="piano-key-button" data-key-index="6" aria-label="Play B4 at 493.88 hertz">
+                  <span>B4</span>
+                </button>
+                <button type="button" class="piano-key-button" data-key-index="7" aria-label="Play C5 at 523.27 hertz">
+                  <span>C5</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="overview" class="section intro-grid">
+        <div class="section-copy" data-reveal>
+          <p class="section-kicker">Project snapshot</p>
+          <h2>A small digital piano using RP2040 Microcontroller.</h2>
+          <p>
+            My arduino piano project is my first arduino project. It functions as an 8 key piano. A switch changes the
+            sound from piano notes to a wide range of hertz sounds. I used C++ code to program the microcontroller.
+          </p>
+        </div>
+
+        <div class="materials-panel" data-reveal>
+          <p>The materials I used are:</p>
+          <ul>
+            <li>1 RP2040 zero microcontroller</li>
+            <li>8 green leds</li>
+            <li>1 red led</li>
+            <li>1 buzzer</li>
+            <li>1 switch</li>
+            <li>8 buttons</li>
+            <li>8 1k resistors</li>
+            <li>1 2.2k resistor</li>
+            <li>1 3.3v battery</li>
+            <li>1 female plug (to plug into the battery)</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="code" class="section code-section" aria-labelledby="code-title">
+        <div class="section-copy" data-reveal>
+          <p class="section-kicker">Code</p>
+          <h2 id="code-title">Arduino code</h2>
+        </div>
+
+        <div class="code-window" data-reveal>
+          <div class="window-bar" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <pre><code>#include &lt;Arduino.h&gt;
+
+const int BUZZER_PIN = 8;
+
+const int BUTTON1_PIN = 29;
+const int BUTTON2_PIN = 28;
+const int BUTTON3_PIN = 27;
+const int BUTTON4_PIN = 26;
+const int BUTTON5_PIN = 15;
+const int BUTTON6_PIN = 14;
+const int BUTTON7_PIN = 7;
+const int BUTTON8_PIN = 6;
+
+const int SWITCH_FREQUENCY = 5;
+
+int buzzerFrequency1 = 1000;
+int buzzerFrequency2 = 1000;
+int buzzerFrequency3 = 1000;
+int buzzerFrequency4 = 1000;
+int buzzerFrequency5 = 1000;
+int buzzerFrequency6 = 1000;
+int buzzerFrequency7 = 1000;
+int buzzerFrequency8 = 1000;
+void setup()
+{
+  pinMode(BUZZER_PIN, OUTPUT);
+
+  pinMode(BUTTON1_PIN, INPUT_PULLUP);
+  pinMode(BUTTON2_PIN, INPUT_PULLUP);
+  pinMode(BUTTON3_PIN, INPUT_PULLUP);
+  pinMode(BUTTON4_PIN, INPUT_PULLUP);
+  pinMode(BUTTON5_PIN, INPUT_PULLUP);
+  pinMode(BUTTON6_PIN, INPUT_PULLUP);
+  pinMode(BUTTON7_PIN, INPUT_PULLUP);
+  pinMode(BUTTON8_PIN, INPUT_PULLUP);
+
+  pinMode(SWITCH_FREQUENCY, INPUT_PULLUP);
+
+  tone(BUZZER_PIN, 1000, 500);
+  Serial.begin(9600);
+}
+
+void loop()
+{
+  int switchState = digitalRead(SWITCH_FREQUENCY);
+
+  if (switchState == LOW)
+  {
+    buzzerFrequency1 = 50;
+    buzzerFrequency2 = 100;
+    buzzerFrequency3 = 200;
+    buzzerFrequency4 = 350;
+    buzzerFrequency5 = 550;
+    buzzerFrequency6 = 700;
+    buzzerFrequency7 = 900;
+    buzzerFrequency8 = 1100;
+  }
+  else
+  {
+    buzzerFrequency1 = 261.63;
+    buzzerFrequency2 = 293.66;
+    buzzerFrequency3 = 329.63;
+    buzzerFrequency4 = 349.23;
+    buzzerFrequency5 = 392.00;
+    buzzerFrequency6 = 440.00;
+    buzzerFrequency7 = 493.88;
+    buzzerFrequency8 = 523.27;
+  }
+
+
+  int buttonState1 = digitalRead(BUTTON1_PIN);
+  int buttonState2 = digitalRead(BUTTON2_PIN);
+  int buttonState3 = digitalRead(BUTTON3_PIN);
+  int buttonState4 = digitalRead(BUTTON4_PIN);
+  int buttonState5 = digitalRead(BUTTON5_PIN);
+  int buttonState6 = digitalRead(BUTTON6_PIN);
+  int buttonState7 = digitalRead(BUTTON7_PIN);
+  int buttonState8 = digitalRead(BUTTON8_PIN);
+
+  if (buttonState1 == LOW)
+  {
+    tone(BUZZER_PIN, buzzerFrequency1);
+    delay(100);
+  }
+  else if (buttonState2 == LOW)
+  {
+    tone(BUZZER_PIN, buzzerFrequency2);
+    delay(100);
+  }
+  else if (buttonState3 == LOW)
+  {
+    tone(BUZZER_PIN, buzzerFrequency3);
+    delay(100);
+  }
+  else if (buttonState4 == LOW)
+  {
+    tone(BUZZER_PIN, buzzerFrequency4);
+    delay(100);
+  }
+  else if (buttonState5 == LOW)
+  {
+    tone(BUZZER_PIN, buzzerFrequency5);
+    delay(100);
+  }
+  else if (buttonState6 == LOW)
+  {
+    tone(BUZZER_PIN, buzzerFrequency6);
+    delay(100);
+  }
+  else if (buttonState7 == LOW)
+  {
+    tone(BUZZER_PIN, buzzerFrequency7);
+    delay(100);
+  }
+  else if (buttonState8 == LOW)
+  {
+    tone(BUZZER_PIN, buzzerFrequency8);
+    delay(100);
+  }
+  else
+  {
+
+    noTone(BUZZER_PIN);
+  }
+}</code></pre>
+        </div>
+      </section>
+
+      <section id="process" class="process-section" aria-label="Build process">
+        <article class="process-entry" data-reveal>
+          <p class="process-copy">I began with just testing out a buzzer.</p>
+          <div class="process-media">
+            <div class="process-carousel" data-carousel>
+              <button class="carousel-button previous" type="button" data-carousel-previous aria-label="Previous media">
+                &larr;
+              </button>
+              <div class="carousel-frame">
+                <img class="is-active" src="assets/process/buzzer-test.jpg" alt="Buzzer test setup" loading="lazy" />
+                <video
+                  src="assets/process/buzzer-test-video.mp4"
+                  poster="assets/process/buzzer-test.jpg"
+                  controls
+                  preload="metadata"
+                  playsinline
+                ></video>
+              </div>
+              <button class="carousel-button next" type="button" data-carousel-next aria-label="Next media">
+                &rarr;
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <article class="process-entry" data-reveal>
+          <p class="process-copy">
+            Then I added buttons to the buzzer. It worked but it was very clunky. I soon realized that it would be
+            better to use small buttons and make the physical piano key separately.
+          </p>
+          <div class="process-media">
+            <div id="clunky-buttons-carousel" class="process-carousel" data-carousel>
+              <button class="carousel-button previous" type="button" data-carousel-previous aria-label="Previous media">
+                &larr;
+              </button>
+              <div class="carousel-frame">
+                <img
+                  class="is-active"
+                  src="assets/process/buttons-clunky-frame.jpg"
+                  alt="Clunky button and buzzer test setup"
+                  loading="lazy"
+                />
+                <video
+                  src="assets/process/buttons-clunky-video.mp4"
+                  poster="assets/process/buttons-clunky-frame.jpg"
+                  controls
+                  preload="metadata"
+                  playsinline
+                ></video>
+              </div>
+              <button class="carousel-button next" type="button" data-carousel-next aria-label="Next media">
+                &rarr;
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <article class="process-entry" data-reveal>
+          <p class="process-copy">I used new buttons and a smaller buzzer for my final version using a bread board.</p>
+          <div class="process-media">
+            <div id="breadboard-carousel" class="process-carousel" data-carousel>
+              <button class="carousel-button previous" type="button" data-carousel-previous aria-label="Previous image">
+                &larr;
+              </button>
+              <div class="carousel-frame">
+                <img
+                  class="is-active"
+                  src="assets/process/final-breadboard-1.jpg"
+                  alt="Final bread board with new buttons and smaller buzzer"
+                  loading="lazy"
+                />
+                <img src="assets/process/final-breadboard-2.jpg" alt="Final bread board detail" loading="lazy" />
+                <img src="assets/process/final-breadboard-3.jpg" alt="Final bread board detail" loading="lazy" />
+                <img src="assets/process/final-breadboard-4.jpg" alt="Final bread board detail" loading="lazy" />
+                <img src="assets/process/final-breadboard-5.jpg" alt="Final bread board detail" loading="lazy" />
+              </div>
+              <button class="carousel-button next" type="button" data-carousel-next aria-label="Next image">
+                &rarr;
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <article class="process-entry" data-reveal>
+          <p class="process-copy">
+            Then I moved on to actually soldering the components. This part was the hardest because I was new to soldering
+            electronics. I also found it difficult to visualize where to connect the wires.
+          </p>
+          <div class="process-media">
+            <img src="assets/process/soldering.jpg" alt="Soldering the piano components" loading="lazy" />
+          </div>
+        </article>
+
+        <article class="process-entry" data-reveal>
+          <p class="process-copy">I finished up with a plastic and wooden case.</p>
+          <div class="process-media">
+            <div class="process-carousel" data-carousel>
+              <button class="carousel-button previous" type="button" data-carousel-previous aria-label="Previous media">
+                &larr;
+              </button>
+              <div class="carousel-frame">
+                <img class="is-active" src="assets/process/finished-case.jpg" alt="Finished plastic and wooden case" loading="lazy" />
+                <video
+                  src="assets/process/VID_20260726_163913056%20copy.mp4"
+                  poster="assets/process/VID_20260726_163913056%20copy%20poster.jpg"
+                  controls
+                  preload="metadata"
+                  playsinline
+                ></video>
+              </div>
+              <button class="carousel-button next" type="button" data-carousel-next aria-label="Next media">
+                &rarr;
+              </button>
+            </div>
+          </div>
+        </article>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>Arduino Piano Project</p>
+      <a href="#top">Back to top</a>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
